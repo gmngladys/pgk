@@ -147,6 +147,39 @@
     background: var(--gold);
     border-radius: 50%;
   }
+  .tee-time-selector {
+    display: none;
+    padding: 12px 18px;
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-top: none;
+    gap: 12px;
+    align-items: center;
+  }
+  .tee-time-selector.visible { display: flex; }
+  .tee-time-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .tee-btns { display: flex; gap: 8px; }
+  .tee-btn {
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tee-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .tee-btn.selected { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 600; }
+  .tee-btn.invalid-tee { border-color: var(--red) !important; }
   .submit-area { margin-top: 36px; text-align: center; }
   .submit-btn {
     background: var(--gold);
@@ -279,6 +312,15 @@
   const MAX_SLOTS = 4;
   let slotCounts = {};
   let formReady = false;
+  let selectedTeeTime = null;
+
+  window.selectTee = function(eventId, tee, btn) {
+    selectedTeeTime = tee;
+    document.querySelectorAll(`#tee-${eventId} .tee-btn`).forEach(b => {
+      b.classList.remove('selected', 'invalid-tee');
+    });
+    btn.classList.add('selected');
+  };
 
   const q = query(collection(db, "registrations"));
   onSnapshot(q, (snapshot) => {
@@ -311,8 +353,9 @@
       const slotsRemaining = MAX_SLOTS - count;
       const wrapper = document.createElement('div');
       wrapper.className = 'event-option' + (isFull ? ' full' : '');
+      const isSelected = selectedValue == ev.id;
       wrapper.innerHTML = `
-        <input type="radio" name="event" id="ev${ev.id}" value="${ev.id}" ${isFull ? 'disabled' : ''} ${selectedValue == ev.id ? 'checked' : ''}>
+        <input type="radio" name="event" id="ev${ev.id}" value="${ev.id}" ${isFull ? 'disabled' : ''} ${isSelected ? 'checked' : ''}>
         <label class="event-label" for="ev${ev.id}">
           <div class="radio-indicator"></div>
           <div class="event-info">
@@ -323,7 +366,27 @@
             <div class="slots-dots">${dotsHTML}</div>
             ${isFull ? '<div class="full-badge">Full</div>' : `<div class="slots-text">${slotsRemaining} slot${slotsRemaining !== 1 ? 's' : ''} left</div>`}
           </div>
-        </label>`;
+        </label>
+        ${!isFull ? `
+        <div class="tee-time-selector ${isSelected ? 'visible' : ''}" id="tee-${ev.id}">
+          <span class="tee-time-label">Tee Time</span>
+          <div class="tee-btns">
+            <button type="button" class="tee-btn" data-tee="AM" onclick="selectTee(${ev.id}, 'AM', this)">AM</button>
+            <button type="button" class="tee-btn" data-tee="PM" onclick="selectTee(${ev.id}, 'PM', this)">PM</button>
+          </div>
+        </div>` : ''}`;
+
+      // Show/hide tee selector on radio change
+      const radio = wrapper.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.addEventListener('change', () => {
+          document.querySelectorAll('.tee-time-selector').forEach(el => el.classList.remove('visible'));
+          document.getElementById(`tee-${ev.id}`)?.classList.add('visible');
+          selectedTeeTime = null;
+          document.querySelectorAll('.tee-btn').forEach(b => b.classList.remove('selected', 'invalid-tee'));
+        });
+      }
+
       grid.appendChild(wrapper);
     });
   }
@@ -352,6 +415,14 @@
       return;
     }
 
+    if (!selectedTeeTime) {
+      errorEl.textContent = 'Please select a tee time (AM or PM) for your event.';
+      errorEl.style.display = 'block';
+      const eventId2 = parseInt(selected.value);
+      document.querySelectorAll(`#tee-${eventId2} .tee-btn`).forEach(b => b.classList.add('invalid-tee'));
+      return;
+    }
+
     const eventId = parseInt(selected.value);
     const event = EVENTS.find(e => e.id === eventId);
 
@@ -369,13 +440,15 @@
       await addDoc(collection(db, "registrations"), {
         name, company, email, phone, eventId,
         eventName: event.name,
+        teeTime: selectedTeeTime,
         timestamp: new Date().toISOString()
       });
       document.getElementById('formCard').style.display = 'none';
       document.getElementById('successCard').style.display = 'block';
       document.getElementById('successMsg').innerHTML =
         `Thank you, <strong style="color:var(--gold)">${name}</strong>.<br>
-         Your spot at <strong style="color:var(--gold)">${event.name}</strong> has been reserved.<br><br>
+         Your spot at <strong style="color:var(--gold)">${event.name}</strong> has been reserved.<br>
+         Tee time preference: <strong style="color:var(--gold)">${selectedTeeTime}</strong><br><br>
          <span style="font-size:12px">We will reach out to you at ${email} with further details.</span>`;
     } catch (err) {
       errorEl.textContent = 'Something went wrong. Please try again.';
