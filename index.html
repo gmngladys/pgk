@@ -7,29 +7,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green: #1a3d2b;
-    --gold: #c9a84c;
+    --orange: #e8671a;
+    --orange-dark: #c45510;
+    --orange-light: rgba(232,103,26,0.12);
     --cream: #f5f0e8;
     --red: #8b1a1a;
-    --dark: #0f1f16;
-    --muted: #7a8f82;
+    --dark: #1a1a1a;
+    --dark2: #111111;
+    --muted: #999999;
+    --border: rgba(232,103,26,0.25);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background-color: var(--dark);
+    background-color: var(--dark2);
     color: var(--cream);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(26,61,43,0.6) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, rgba(232,103,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(232,103,26,0.05) 0%, transparent 50%);
   }
   .page-wrapper { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
   .header { text-align: center; margin-bottom: 48px; animation: fadeDown 0.8s ease both; }
   .header-badge {
     display: inline-block;
-    border: 1px solid var(--gold);
-    color: var(--gold);
+    border: 1px solid var(--orange);
+    color: var(--orange);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -44,16 +47,16 @@
     color: #fff;
     margin-bottom: 8px;
   }
-  .header h1 span { color: var(--gold); }
+  .header h1 span { color: var(--orange); }
   .header p { color: var(--muted); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
   .divider {
     width: 60px; height: 2px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    background: linear-gradient(to right, transparent, var(--orange), transparent);
     margin: 20px auto;
   }
   .form-card {
-    background: rgba(26, 61, 43, 0.25);
-    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(30,30,30,0.5);
+    border: 1px solid rgba(232,103,26,0.2);
     border-radius: 2px;
     padding: 40px;
     animation: fadeUp 0.9s ease 0.2s both;
@@ -63,15 +66,15 @@
     font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--orange);
     margin-bottom: 24px;
   }
   .field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
   .field { display: flex; flex-direction: column; gap: 7px; }
   label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
   input[type="text"], input[type="email"], input[type="tel"] {
-    background: rgba(15,31,22,0.8);
-    border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(20,20,20,0.9);
+    border: 1px solid rgba(232,103,26,0.25);
     color: var(--cream);
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
@@ -80,15 +83,15 @@
     border-radius: 1px;
     transition: border-color 0.2s;
   }
-  input:focus { border-color: var(--gold); }
-  input::placeholder { color: rgba(122,143,130,0.5); }
+  input:focus { border-color: var(--orange); }
+  input::placeholder { color: rgba(150,150,150,0.4); }
   input.invalid { border-color: var(--red) !important; }
   .events-title {
     font-family: 'Playfair Display', serif;
     font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--orange);
     margin: 32px 0 20px;
   }
   .events-grid { display: flex; flex-direction: column; gap: 10px; }
@@ -99,14 +102,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 14px 18px;
-    border: 1px solid rgba(201,168,76,0.15);
-    background: rgba(15,31,22,0.5);
+    border: 1px solid rgba(232,103,26,0.15);
+    background: rgba(20,20,20,0.6);
     cursor: pointer;
     transition: all 0.2s;
     gap: 12px;
   }
-  .event-option input:checked + .event-label { border-color: var(--gold); background: rgba(201,168,76,0.1); }
-  .event-option:not(.full):hover .event-label { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.05); }
+  .event-option input:checked + .event-label { border-color: var(--orange); background: rgba(232,103,26,0.1); }
+  .event-option:not(.full):hover .event-label { border-color: rgba(232,103,26,0.5); background: rgba(232,103,26,0.05); }
   .event-option.full { cursor: not-allowed; opacity: 0.45; }
   .event-option.full .event-label { cursor: not-allowed; }
   .event-info { flex: 1; }
@@ -117,10 +120,10 @@
   .dot {
     width: 8px; height: 8px;
     border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(232,103,26,0.4);
     background: transparent;
   }
-  .dot.filled { background: var(--gold); border-color: var(--gold); }
+  .dot.filled { background: var(--orange); border-color: var(--orange); }
   .dot.full-dot { border-color: var(--red); background: var(--red); }
   .slots-text { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
   .full-badge {
@@ -132,26 +135,26 @@
   }
   .radio-indicator {
     width: 16px; height: 16px;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(232,103,26,0.4);
     border-radius: 50%;
     flex-shrink: 0;
     position: relative;
   }
-  .event-option input:checked + .event-label .radio-indicator { border-color: var(--gold); }
+  .event-option input:checked + .event-label .radio-indicator { border-color: var(--orange); }
   .event-option input:checked + .event-label .radio-indicator::after {
     content: '';
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 7px; height: 7px;
-    background: var(--gold);
+    background: var(--orange);
     border-radius: 50%;
   }
   .tee-time-selector {
     display: none;
     padding: 12px 18px;
-    background: rgba(201,168,76,0.06);
-    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(232,103,26,0.06);
+    border: 1px solid rgba(232,103,26,0.2);
     border-top: none;
     gap: 12px;
     align-items: center;
@@ -167,7 +170,7 @@
   .tee-btns { display: flex; gap: 8px; }
   .tee-btn {
     background: transparent;
-    border: 1px solid rgba(201,168,76,0.3);
+    border: 1px solid rgba(232,103,26,0.3);
     color: var(--cream);
     font-family: 'DM Sans', sans-serif;
     font-size: 12px;
@@ -177,13 +180,13 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .tee-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
-  .tee-btn.selected { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 600; }
+  .tee-btn:hover { border-color: var(--orange); background: rgba(232,103,26,0.08); }
+  .tee-btn.selected { background: var(--orange); color: var(--dark); border-color: var(--orange); font-weight: 600; }
   .tee-btn.invalid-tee { border-color: var(--red) !important; }
   .submit-area { margin-top: 36px; text-align: center; }
   .submit-btn {
-    background: var(--gold);
-    color: var(--dark);
+    background: var(--orange);
+    color: #fff;
     border: none;
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
@@ -194,7 +197,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  .submit-btn:hover { background: #e0bc6a; transform: translateY(-1px); }
+  .submit-btn:hover { background: #f07830; transform: translateY(-1px); }
   .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .error-msg { color: #e07070; font-size: 12px; letter-spacing: 1px; margin-top: 12px; display: none; text-align: center; }
   .loading-overlay {
@@ -208,8 +211,8 @@
   .spinner {
     display: inline-block;
     width: 20px; height: 20px;
-    border: 2px solid rgba(201,168,76,0.3);
-    border-top-color: var(--gold);
+    border: 2px solid rgba(232,103,26,0.3);
+    border-top-color: var(--orange);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-right: 10px;
@@ -217,7 +220,7 @@
   }
   .success-card { display: none; text-align: center; padding: 60px 40px; animation: fadeUp 0.6s ease both; }
   .success-icon { font-size: 48px; margin-bottom: 20px; }
-  .success-card h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 12px; }
+  .success-card h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--orange); margin-bottom: 12px; }
   .success-card p { color: var(--muted); font-size: 14px; line-height: 1.7; }
   @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
@@ -231,7 +234,8 @@
 <body>
 <div class="page-wrapper">
   <div class="header">
-    <div class="header-badge">Professional Golfers of Kenya</div>
+    <img src="https://computechlimited.com/wp-content/uploads/2023/03/Computech-logo.png" alt="Computech Limited" style="height:48px; margin-bottom:16px;" />
+    <div class="header-badge">Computech Limited in Partnership with Professional Golfers of Kenya</div>
     <h1>PGK <span>Equator</span> Tour</h1>
     <p>Event Schedule 2026 / 2027</p>
     <div class="divider"></div>
@@ -446,9 +450,9 @@
       document.getElementById('formCard').style.display = 'none';
       document.getElementById('successCard').style.display = 'block';
       document.getElementById('successMsg').innerHTML =
-        `Thank you, <strong style="color:var(--gold)">${name}</strong>.<br>
-         Your spot at <strong style="color:var(--gold)">${event.name}</strong> has been reserved.<br>
-         Tee time preference: <strong style="color:var(--gold)">${selectedTeeTime}</strong><br><br>
+        `Thank you, <strong style="color:var(--orange)">${name}</strong>.<br>
+         Your spot at <strong style="color:var(--orange)">${event.name}</strong> has been reserved.<br>
+         Tee time preference: <strong style="color:var(--orange)">${selectedTeeTime}</strong><br><br>
          <span style="font-size:12px">We will reach out to you at ${email} with further details.</span>`;
     } catch (err) {
       errorEl.textContent = 'Something went wrong. Please try again.';
